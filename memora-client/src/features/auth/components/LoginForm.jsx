@@ -11,14 +11,13 @@ export default function LoginForm() {
   const{
     register,
     handleSubmit,
-    formState: {errors, isSubmitting},
-    reset
+    formState: {errors, isSubmitting}
   } = useForm({ resolver: zodResolver(loginSchema)})
 
   const onSubmit = async (data) => {
     console.log("Login data:", data);
 
-    // simulate API delay
+    // to simulate api delay
     await new Promise((res) => setTimeout(res, 1000));
     // reset();
 

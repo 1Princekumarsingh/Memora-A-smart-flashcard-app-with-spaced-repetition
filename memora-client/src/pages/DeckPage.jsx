@@ -1,3 +1,7 @@
+import { useParams } from "react-router-dom";
+
 export default function DeckPage() {
-  return <div>Home Page</div>;
+  const{id} = useParams();
+
+  return <div>Deck ID: {id}</div>
 }

@@ -17,8 +17,7 @@ export default function AuthPage() {
       <button
       onClick={() => setMode(mode === "login" ? "signup" : "login")}
       className="mt-4 text-blue-600">
-        {mode === "login"?
-         "Don't have an account? Sign up" : "Already have an account? Login"}
+        {mode === "login"? "Don't have an account? Sign up" : "Already have an account? Login"}
       </button>
     </div>
   )

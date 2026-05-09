@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../../../lib/schemas/auth";
 import useAuthStore from "../../../store/authStore";
 import { useNavigate } from "react-router-dom";
-import { email } from "zod";
 
 export default function SignupForm() {
     const navigate = useNavigate();
@@ -49,7 +48,7 @@ export default function SignupForm() {
 
             <div className="mb-4">
                 <label>Confirm Password</label>
-                <input type="password" {...register("confirmPassword")} className="w-full p-2 border rounder-md"/>
+                <input type="password" {...register("confirmPassword")} className="w-full p-2 border rounded-md"/>
                 {errors.confirmPassword && (
                     <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
                 )}

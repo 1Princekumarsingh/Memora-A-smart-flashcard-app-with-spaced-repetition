@@ -8,7 +8,7 @@ const useAuthStore = create(
       // hyderate and dehyderate: prevent flicker redirect and auth glitches
       hydrated: false,
 
-      isAuthenticated: () => !!get().token, //get gives the current store state
+      isAuthenticated: () => !!get().token, //get: gives the current store state
 
       login: ({ token, user }) => {
         set({ token, user });

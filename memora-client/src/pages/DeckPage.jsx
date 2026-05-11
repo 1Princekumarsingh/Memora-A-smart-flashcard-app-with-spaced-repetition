@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import useDeckStore from "../features/deck/hooks/useDeckStore";
+import { Link } from "react-router-dom";
 
-import CardForm from "../features/deck/components/CardForm";
-import CardList from "../features/deck/components/CardList";
+import CardForm from "../features/card/components/CardForm";
+import CardList from "../features/card/components/CardList";
 
 export default function DeckPage() {
   const{id} = useParams();
@@ -20,6 +21,10 @@ export default function DeckPage() {
       <h1 className="text-3xl font-bold mb-6">
         {deck.name}
       </h1>
+
+      <Link to={`/study/${deck.id}`}className="inline-block mb-6 bg-purple-600 text-white px-4 py-2 rounded-md">
+        Start Study
+      </Link>
 
       <CardForm onAddCard={(card)=> addCard(deck.id, card)}/>
       <CardList cards={deck.cards}/>

@@ -7,7 +7,10 @@ export function DeckCard({ deck }) {
       className="block p-4 border rounded-md hover:bg-gray-50">
       
       <h3 className="font-semibold">{deck.name}</h3>
-    
+
+      <p className="text-sm text-gray-500 mt-1">
+        {deck.cards.length} cards
+      </p>
     </Link>
   );
 }

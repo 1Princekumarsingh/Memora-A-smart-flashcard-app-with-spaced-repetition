@@ -3,7 +3,7 @@ import { useReducer } from "react";
 const initialState = {
     currentIndex: 0,
     flipped: false,
-    completed: false
+    revealed: false
 }
 
 function reducer(state, action){
@@ -11,20 +11,16 @@ function reducer(state, action){
         case "FLIP":
             return{
                 ...state,
-                flipped: !state.flipped
+                flipped: !state.flipped,
+                revealed: true
             }
         
         case "NEXT":
             return{
                 ...state,
                 currentIndex: state.currentIndex + 1,
-                flipped: false
-            }
-        
-        case "COMPLETE":
-            return{
-                ...state,
-                completed: true
+                flipped: false,
+                revealed: false
             }
         
         default:

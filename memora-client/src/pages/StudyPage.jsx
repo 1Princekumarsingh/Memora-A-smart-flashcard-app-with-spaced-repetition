@@ -4,10 +4,12 @@ import useDeckStore from "../features/deck/hooks/useDeckStore";
 import useStudySession from "../features/study/hooks/useStudySession";
 
 import StudyCard from "../features/study/components/StudyCard";
+import RatingBar from "../features/study/components/RatingBar";
 
 export default function StudyPage() {
   const { id } = useParams();
 
+  const rateCard = useDeckStore((s)=> s.rateCard)
   const decks = useDeckStore((s) => s.decks);
   const deck = decks.find((d) => d.id === Number(id))
   
@@ -60,6 +62,11 @@ export default function StudyPage() {
     dispatch({ type: "NEXT" });
   }
 
+  const handleRate = (rating) =>{
+    rateCard(deck.id, currentCard.id, rating);
+    handleNext();
+  }
+
   return (
     <div className="mx-auto max-w-3xl p-4 sm:p-6">
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -86,19 +93,18 @@ export default function StudyPage() {
 
       <StudyCard card={currentCard} flipped={state.flipped} />
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+      <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
         <button
           onClick={() => dispatch({ type: "FLIP" })}
-          className="rounded-md bg-blue-600 px-6 py-3 font-medium text-white shadow-sm transition hover:bg-blue-700"
+          className="inline-flex h-12 items-center justify-center rounded-lg bg-blue-600 px-6 text-base font-semibold text-white shadow-sm shadow-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           {state.flipped ? "Show question" : "Show answer"}
         </button>
-        <button
-          onClick={handleNext}
-          className="rounded-md bg-green-600 px-6 py-3 font-medium text-white shadow-sm transition hover:bg-green-700"
-        >
-          {state.currentIndex === deck.cards.length - 1 ? "Finish" : "Next card"}
-        </button>
+
+        {state.revealed && (
+          <RatingBar onRate={handleRate}/>
+        )}
+
       </div>
     </div>
   )

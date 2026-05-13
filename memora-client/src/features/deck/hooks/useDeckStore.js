@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { getNextReviewDate } from "../../../utils/spacedRepetition";
 
 const useDeckStore = create(immer((set) => ({
     decks: [],
@@ -8,7 +9,7 @@ const useDeckStore = create(immer((set) => ({
         decks: [...state.decks, {id: Date.now(), name, cards: []}]
     })),
     
-    addCard: (deckId, card, review) => set((state) => {
+    addCard: (deckId, card) => set((state) => {
        const deck = state.decks.find((d)=> d.id === Number(deckId))
 
        if(!deck) return;
@@ -16,7 +17,8 @@ const useDeckStore = create(immer((set) => ({
        deck.cards.push({
         id: Date.now(),
         ...card,
-        reviews: []
+        reviews: [],
+        nextReview: new Date().toISOString()
        })
     }),
 
@@ -29,8 +31,10 @@ const useDeckStore = create(immer((set) => ({
 
         card.reviews.push({
             rating, 
-            reviewedAt: new Date().toISOString()
+            reviewedAt: new Date().toISOString(),
         })
+
+        card.nextReview = getNextReviewDate(rating);
     })
 })))
 

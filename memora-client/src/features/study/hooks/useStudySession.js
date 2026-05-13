@@ -22,7 +22,7 @@ function reducer(state, action){
                 flipped: false,
                 revealed: false
             }
-        
+
         default:
             return state
 

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom"
 
 import useDeckStore from "../features/deck/hooks/useDeckStore";
@@ -5,15 +6,23 @@ import useStudySession from "../features/study/hooks/useStudySession";
 
 import StudyCard from "../features/study/components/StudyCard";
 import RatingBar from "../features/study/components/RatingBar";
+import { getDueCards } from "../utils/getDueCards";
 
 export default function StudyPage() {
   const { id } = useParams();
 
+  return <StudySession key={id} id={id} />
+}
+
+function StudySession({ id }) {
   const rateCard = useDeckStore((s)=> s.rateCard)
   const decks = useDeckStore((s) => s.decks);
   const deck = decks.find((d) => d.id === Number(id))
   
   const [state, dispatch] = useStudySession();
+  const [dueCardIds] = useState(() =>
+    deck ? getDueCards(deck.cards).map((card) => card.id) : []
+  );
 
   if (!deck) {
     return <Navigate to="/" replace />
@@ -28,9 +37,17 @@ export default function StudyPage() {
       </div>
     )
   }
-  
+
+  if(dueCardIds.length === 0){
+    return (
+      <div className="p-6 text-center">
+        <h1 className="text-2xl font-bold">No cards due today.</h1>
+      </div>
+    )
+  }
+
   //session finished
-  if (state.currentIndex >= deck.cards.length) {
+  if (state.currentIndex >= dueCardIds.length) {
     return (
       <div className="mx-auto max-w-2xl p-6 text-center">
         <div className="rounded-xl border border-gray-200 bg-white px-8 py-12 shadow-sm">
@@ -51,14 +68,23 @@ export default function StudyPage() {
     )
   }
 
-  const currentCard = deck.cards[state.currentIndex];
+  const currentCardId = dueCardIds[state.currentIndex];
+  const currentCard = deck.cards.find((card) => card.id === currentCardId);
+
+  if (!currentCard) {
+    return (
+      <div className="mx-auto max-w-2xl p-6 text-center">
+        <p className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-10 text-gray-500">
+          This card is no longer available.
+        </p>
+      </div>
+    )
+  }
+
   const cardNumber = state.currentIndex + 1;
-  const progress = (cardNumber / deck.cards.length) * 100;
+  const progress = (cardNumber / dueCardIds.length) * 100;
 
   const handleNext = () => {
-    if (state.currentIndex === deck.cards.length - 1) {
-      dispatch({ type: "COMPLETE" });
-    }
     dispatch({ type: "NEXT" });
   }
 
@@ -80,7 +106,7 @@ export default function StudyPage() {
         </div>
 
         <p className="text-sm font-medium text-gray-500">
-          Card {cardNumber} of {deck.cards.length}
+          Card {cardNumber} of {dueCardIds.length}
         </p>
       </div>
 

@@ -7,6 +7,7 @@ import useStudySession from "../features/study/hooks/useStudySession";
 import StudyCard from "../features/study/components/StudyCard";
 import RatingBar from "../features/study/components/RatingBar";
 import { getDueCards } from "../utils/getDueCards";
+import useKeyBoardShortcut from "../features/study/hooks/useKeyboardShortcut";
 
 export default function StudyPage() {
   const { id } = useParams();
@@ -23,6 +24,27 @@ function StudySession({ id }) {
   const [dueCardIds] = useState(() =>
     deck ? getDueCards(deck.cards).map((card) => card.id) : []
   );
+
+  const currentCardId = dueCardIds[state.currentIndex];
+  const currentCard = deck?.cards.find((card) => card.id === currentCardId);
+
+  const handleNext = () => {
+    dispatch({ type: "NEXT" });
+  }
+
+  const handleRate = (rating) =>{
+    if (!deck || !currentCard || !state.revealed) return;
+
+    rateCard(deck.id, currentCard.id, rating);
+    handleNext();
+  }
+
+  useKeyBoardShortcut({
+    " " : () => dispatch({type: "FLIP"}),
+    "1" : () => handleRate("hard"),
+    "2" : () => handleRate("medium"),
+    "3" : () => handleRate("easy")
+  })
 
   if (!deck) {
     return <Navigate to="/" replace />
@@ -46,7 +68,6 @@ function StudySession({ id }) {
     )
   }
 
-  //session finished
   if (state.currentIndex >= dueCardIds.length) {
     return (
       <div className="mx-auto max-w-2xl p-6 text-center">
@@ -58,18 +79,15 @@ function StudySession({ id }) {
             Session completed!
           </h1>
           <Link
-            to={`/decks/${deck.id}`}
+            to={`/`}
             className="mt-6 inline-flex rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
           >
-            Back to deck
+            Back to Home
           </Link>
         </div>
       </div>
     )
   }
-
-  const currentCardId = dueCardIds[state.currentIndex];
-  const currentCard = deck.cards.find((card) => card.id === currentCardId);
 
   if (!currentCard) {
     return (
@@ -83,15 +101,6 @@ function StudySession({ id }) {
 
   const cardNumber = state.currentIndex + 1;
   const progress = (cardNumber / dueCardIds.length) * 100;
-
-  const handleNext = () => {
-    dispatch({ type: "NEXT" });
-  }
-
-  const handleRate = (rating) =>{
-    rateCard(deck.id, currentCard.id, rating);
-    handleNext();
-  }
 
   return (
     <div className="mx-auto max-w-3xl p-4 sm:p-6">

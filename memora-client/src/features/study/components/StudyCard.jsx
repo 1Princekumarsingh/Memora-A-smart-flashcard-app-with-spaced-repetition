@@ -1,15 +1,40 @@
-export default function StudyCard({ card, flipped }) {
-    return (
-        <article className="flex min-h-80 items-center justify-center rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm sm:p-12">
-            <div className="max-w-xl">
-                <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-blue-600">
-                    {flipped ? "Answer" : "Question"}
-                </p>
+export default function StudyCard({
+  card,
+  flipped,
+}) {
+  return (
+    <div className="perspective">
+      <div
+        className={`relative min-h-[260px] transition-transform duration-500 transform-style-preserve-3d ${flipped ? "rotate-y-180" : ""}`}>
+        
+        {/* front */}
+        <div
+          className="absolute inset-0 border rounded-xl p-8 bg-white shadow-md flex items-center justify-center text-center backface-hidden">
+          <div>
+            <p className="text-sm text-gray-500 mb-3">
+              Question
+            </p>
 
-                <h2 className="whitespace-pre-wrap break-words text-2xl font-semibold leading-relaxed text-gray-900 sm:text-3xl">
-                    {flipped ? card.answer : card.question}
-                </h2>
-            </div>
-        </article>
-    )
+            <h2 className="text-2xl font-semibold">
+              {card.question}
+            </h2>
+          </div>
+        </div>
+
+        {/* back */}
+        <div
+          className="absolute inset-0 border rounded-xl p-8 bg-blue-50 shadow-md flex items-center justify-center text-center rotate-y-180 backface-hidden">
+          <div>
+            <p className="text-sm text-gray-500 mb-3">
+              Answer
+            </p>
+
+            <h2 className="text-2xl font-semibold">
+              {card.answer}
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -9,10 +9,7 @@ export default function CardForm({ onAddCard }){
 
     if (!question.trim() || !answer.trim()) return;
 
-    onAddCard({
-        question,
-        answer
-    })
+    onAddCard({question, answer})
     setQuestion("");
     setAnswer("");
     }

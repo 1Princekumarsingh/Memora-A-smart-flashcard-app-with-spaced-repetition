@@ -8,6 +8,7 @@ import StudyCard from "../features/study/components/StudyCard";
 import RatingBar from "../features/study/components/RatingBar";
 import { getDueCards } from "../utils/getDueCards";
 import useKeyBoardShortcut from "../features/study/hooks/useKeyboardShortcut";
+import { RATING_VALUES } from "../constants/ratings";
 
 export default function StudyPage() {
   const { id } = useParams();
@@ -41,9 +42,10 @@ function StudySession({ id }) {
 
   useKeyBoardShortcut({
     " " : () => dispatch({type: "FLIP"}),
-    "1" : () => handleRate("hard"),
-    "2" : () => handleRate("medium"),
-    "3" : () => handleRate("easy")
+    "1" : () => handleRate(RATING_VALUES.FORGOT),
+    "2" : () => handleRate(RATING_VALUES.HARD),
+    "3" : () => handleRate(RATING_VALUES.GOOD),
+    "4" : () => handleRate(RATING_VALUES.EASY)
   })
 
   if (!deck) {
@@ -133,7 +135,7 @@ function StudySession({ id }) {
           onClick={() => dispatch({ type: "FLIP" })}
           className="inline-flex h-12 items-center justify-center rounded-lg bg-blue-600 px-6 text-base font-semibold text-white shadow-sm shadow-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          {state.flipped ? "Show question" : "Show answer"}
+          {state.flipped ? "Show Question" : "Reveal Answer"}
         </button>
 
         {state.revealed && (

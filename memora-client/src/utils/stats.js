@@ -1,20 +1,36 @@
-export function getStudyStats(decks){
-    const allCards = decks.flatMap((deck)=> deck.cards);
+import { RATING_VALUES, isWeakReview } from "../constants/ratings";
 
-    const allReviews =  allCards.flatMap((card)=> card.reviews);
-    const totalReviews = allReviews.length;
+export function getStudyStats(decks) {
+  const allCards = decks.flatMap((deck) => deck.cards);
 
-    const easyCount = allReviews.filter((review) => review.rating === "easy").length;
-    const mediumCount = allReviews.filter((review)=> review.rating === "medium").length;
-    const hardCount = allReviews.filter((review)=> review.rating === "hard").length;
+  const allReviews = allCards.flatMap((card) => card.reviews);
+  const totalReviews = allReviews.length;
 
-    const retentionRate = totalReviews === 0? 0 : Math.round(((easyCount + mediumCount)/ totalReviews)*100)
+  const forgotCount = allReviews.filter(
+    (review) => review.rating === RATING_VALUES.FORGOT
+  ).length;
+  const hardCount = allReviews.filter(
+    (review) => review.rating === RATING_VALUES.HARD
+  ).length;
+  const goodCount = allReviews.filter(
+    (review) => review.rating === RATING_VALUES.GOOD
+  ).length;
+  const easyCount = allReviews.filter(
+    (review) => review.rating === RATING_VALUES.EASY
+  ).length;
 
-    return {
-        totalReviews,
-        easyCount,
-        mediumCount,
-        hardCount,
-        retentionRate
-    }
+  const weakCount = allReviews.filter((review) => isWeakReview(review.rating)).length;
+  const strongCount = totalReviews - weakCount;
+  const retentionRate = totalReviews === 0 ? 0 : Math.round((strongCount / totalReviews) * 100);
+
+  return {
+    totalReviews,
+    forgotCount,
+    hardCount,
+    goodCount,
+    easyCount,
+    weakCount,
+    strongCount,
+    retentionRate,
+  };
 }

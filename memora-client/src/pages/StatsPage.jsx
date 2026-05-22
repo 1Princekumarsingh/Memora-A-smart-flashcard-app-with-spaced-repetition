@@ -1,14 +1,15 @@
 import useDeckStore from "../features/deck/hooks/useDeckStore";
-import { getStudyStats } from "../utils/stats";
+import { getStudyStats, getMostForgottenDecks } from "../utils/stats";
 
 import StudyHeatmap from "../features/stats/components/StudyHeatmap";
 import { mockReviews } from "../features/stats/mockReviews";
-import { buildHeatmapData } from "../utils/builHeatmapData";
+import { buildHeatmapData } from "../utils/buildHeatmapData";
 
 export default function StatsPage() {
   
   const decks = useDeckStore((s)=> s.decks)
   const stats = getStudyStats(decks)
+  const mostForgottenDecks = getMostForgottenDecks(decks);
 
   if (stats.totalReviews === 0) {
     return (
@@ -24,7 +25,7 @@ export default function StatsPage() {
     );
   }
 
-   // transform raw reviews into heatmap data
+  // transform raw reviews into heatmap data
   const heatmapData = buildHeatmapData(mockReviews);
 
   return(
@@ -75,6 +76,46 @@ export default function StatsPage() {
         <StatCard title="Easy Reviews" values={stats.easyCount} tone="green" />
         <StatCard title="Weak Reviews" values={stats.weakCount} tone="slate" />
       </div>
+
+      <div className="mt-8">
+        <h2 className="mb-4 text-2xl font-bold text-slate-900">
+          Most Forgotten Cards
+        </h2>
+
+        {mostForgottenDecks.length === 0 ? (
+          <p className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-sm text-slate-500">
+            No forgotten cards yet.
+          </p>
+          ) : (
+          <div className="space-y-3">
+            {mostForgottenDecks.map((deck) => (
+              <div
+                key={deck.id}
+                className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                <h3 className="font-semibold text-slate-900">
+                  {deck.name}
+                </h3>
+
+                <div className="mt-3 space-y-2">
+                  {deck.cards.map((card) => (
+                    <div
+                      key={card.id}
+                      className="flex items-center justify-between gap-4 rounded-md bg-slate-50 px-3 py-2">
+                      <p className="text-sm font-medium text-slate-700">
+                        {card.question}
+                      </p>
+
+                      <span className="shrink-0 rounded-md bg-rose-50 px-3 py-1 text-sm font-bold text-rose-700 ring-1 ring-rose-100">
+                        {card.forgetRate}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -103,4 +144,3 @@ function StatCard({title, values, tone = "slate"}){
     </div>
   )
 }
-

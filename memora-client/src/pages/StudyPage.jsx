@@ -9,6 +9,7 @@ import RatingBar from "../features/study/components/RatingBar";
 import { getDueCards } from "../utils/getDueCards";
 import useKeyBoardShortcut from "../features/study/hooks/useKeyboardShortcut";
 import { RATING_VALUES } from "../constants/ratings";
+import useToastStore from "../store/toastStore";
 
 export default function StudyPage() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ export default function StudyPage() {
 
 function StudySession({ id }) {
   const rateCard = useDeckStore((s)=> s.rateCard)
+  const addToast = useToastStore((state) => state.addToast);
   const decks = useDeckStore((s) => s.decks);
   const deck = decks.find((d) => d.id === Number(id))
   
@@ -37,6 +39,12 @@ function StudySession({ id }) {
     if (!deck || !currentCard || !state.revealed) return;
 
     rateCard(deck.id, currentCard.id, rating);
+
+    const isLastCard = state.currentIndex === dueCardIds.length - 1;
+    if (isLastCard) {
+      addToast("Session completed!", "success");
+    }
+
     handleNext();
   }
 

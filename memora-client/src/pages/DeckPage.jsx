@@ -5,13 +5,16 @@ import { Link } from "react-router-dom";
 import CardForm from "../features/card/components/CardForm";
 import CardList from "../features/card/components/CardList";
 
+import useToastStore from "../store/toastStore";
+
 export default function DeckPage() {
   const{id} = useParams();
 
   const decks = useDeckStore((s) => s.decks);
   const addCard = useDeckStore((s)=> s.addCard);
-
   const deck = decks.find((d) => d.id === Number(id));
+  const addToast = useToastStore((state) => state.addToast);
+
   if (!deck) {
     return <p>Deck not found.</p>;
   }
@@ -22,7 +25,9 @@ export default function DeckPage() {
         {deck.name}
       </h1>
 
-      <Link to={`/study/${deck.id}`}className="inline-block mb-6 bg-purple-600 text-white px-4 py-2 rounded-md">
+      <Link to={`/study/${deck.id}`}
+      className="inline-block mb-6 bg-purple-600 text-white px-4 py-2 rounded-md"
+      onClick={() => addToast("Review session started", "info")}>
         Start Study
       </Link>
 

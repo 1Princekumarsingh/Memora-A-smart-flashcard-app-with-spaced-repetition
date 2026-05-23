@@ -1,17 +1,23 @@
 import useDeckStore from "../hooks/useDeckStore";
 import { useState } from "react";
+import useToastStore from "../../../store/toastStore";
 
 export default function DeckForm(){
     const [name, setName] = useState("");
     const addDeck = useDeckStore((s) => s.addDeck);
+    const addToast = useToastStore((state)=> state.addToast);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(!name.trim()) return;
+        if(!name.trim()){
+            addToast("Please enter a deck name", "error");
+            return
+        }
 
         addDeck(name);
         setName("");
+        addToast("Deck created successfully", "success");
     }
 
     return(

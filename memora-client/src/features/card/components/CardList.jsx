@@ -14,13 +14,8 @@ export default function CardList({cards}){
                         A: {card.answer}
                     </p>
                     <p className="text-xs text-gray-400 mt-1">
-                        Last reviewed:
-                        {" "}
-                        {card.reviews.at(-1)?.reviewedAt
-                        ? new Date(
-                            card.reviews.at(-1).reviewedAt
-                            ).toLocaleDateString()
-                        : "Never"}
+                        Last reviewed: {" "}
+                        {card.reviews.at(-1)?.reviewedAt ? new Date(card.reviews.at(-1).reviewedAt).toLocaleDateString(): "Never"}
                     </p>
                 </div>
             ))}

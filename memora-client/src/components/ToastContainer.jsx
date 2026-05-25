@@ -1,4 +1,5 @@
 import useToastStore from "../store/toastStore";
+import { AnimatePresence, motion } from "framer-motion";
 
 const toastStyles = {
   success: "bg-green-100 text-green-800 border-green-300",
@@ -12,14 +13,21 @@ export default function ToastContainer(){
 
     return(
         <div className="fixed right-4 top-4 z-50 space-y-3">
-            {toasts.map((toast)=> (
-                <div key={toast.id} className={`flex items-center gap-3 rounded-md border px-4 py-3 shadow-md ${toastStyles[toast.type]}`}> 
+            <AnimatePresence>
+                {toasts.map((toast)=> (
+                    <motion.div key={toast.id} 
+                    initial = {{opacity:0, x:50}}
+                    animate= {{opacity: 1, x:0}}
+                    exit={{opacity:0, x:50}}
+                    transition={{duration: 0.2}}
+                    className={`flex items-center gap-3 rounded-md border px-4 py-3 shadow-md ${toastStyles[toast.type]}`}> 
                     <span>{toast.message}</span>
                     <button type="button" onClick={()=> removeToast(toast.id)} className="font-bold">
                         x
                     </button>
-                </div>
+                </motion.div>
             ))}
+            </AnimatePresence>
         </div>
     )
 }

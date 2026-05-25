@@ -10,6 +10,7 @@ import { getDueCards } from "../utils/getDueCards";
 import useKeyBoardShortcut from "../features/study/hooks/useKeyboardShortcut";
 import { RATING_VALUES } from "../constants/ratings";
 import useToastStore from "../store/toastStore";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function StudyPage() {
   const { id } = useParams();
@@ -129,14 +130,22 @@ function StudySession({ id }) {
         </p>
       </div>
 
-      <div className="mb-6 h-2 overflow-hidden rounded-full bg-gray-200">
-        <div
-          className="h-full rounded-full bg-blue-600 transition-all"
-          style={{ width: `${progress}%` }}
+      <div className="mb-6 h-2 overflow-hidden rounded-full bg-gray-600">
+        <motion.div
+          className="h-full rounded-full bg-blue-600"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{duration:0.3, ease:"easeOut"}}
         />
       </div>
 
-      <StudyCard card={currentCard} flipped={state.flipped} />
+      <AnimatePresence mode="wait">
+        <StudyCard
+          key={currentCard.id}
+          card={currentCard}
+          flipped={state.flipped}
+        />
+      </AnimatePresence>
 
       <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
         <button

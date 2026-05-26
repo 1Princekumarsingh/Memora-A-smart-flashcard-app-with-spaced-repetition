@@ -16,12 +16,12 @@ export default function DeckPage() {
   const addToast = useToastStore((state) => state.addToast);
 
   if (!deck) {
-    return <p>Deck not found.</p>;
+    return <p className="text-slate-600 dark:text-slate-400">Deck not found.</p>;
   }
 
   return(
     <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="mb-6 text-3xl font-bold text-slate-900 dark:text-slate-100">
         {deck.name}
       </h1>
 

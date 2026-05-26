@@ -22,7 +22,7 @@ export default function DeckForm(){
 
     return(
         <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
-            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="New deck name" className="border p-2 rounded-md flex-grow"/>
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="New deck name" className="flex-grow rounded-md border border-gray-300 bg-white p-2 text-slate-900 placeholder:text-gray-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"/>
             <button className="bg-blue-600 text-white px-4 rounded-md">Add</button>
         </form>
     )

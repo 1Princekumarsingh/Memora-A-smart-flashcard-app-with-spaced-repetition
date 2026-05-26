@@ -9,15 +9,15 @@ export default function StudyCard({
         key: "answer",
         label: "Answer",
         text: card.answer,
-        eyebrowClassName: "bg-blue-50 text-blue-700 ring-blue-100",
-        surfaceClassName: "border-blue-400 bg-blue-50/80",
+        eyebrowClassName: "bg-blue-50 text-blue-700 ring-blue-100 dark:bg-blue-950/60 dark:text-blue-200 dark:ring-blue-800",
+        surfaceClassName: "border-blue-400 bg-blue-50/80 dark:border-blue-800 dark:bg-blue-950/40",
       }
     : {
         key: "question",
         label: "Question",
         text: card.question,
-        eyebrowClassName: "bg-slate-100 text-slate-700 ring-slate-200",
-        surfaceClassName: "border-slate-500 bg-white",
+        eyebrowClassName: "bg-slate-100 text-slate-700 ring-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700",
+        surfaceClassName: "border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900",
       };
 
   return (
@@ -35,7 +35,7 @@ export default function StudyCard({
           animate={{ opacity: 1, scale: 1, rotateY: 0 }}
           exit={{ opacity: 0, scale: 0.98, rotateY: -10 }}
           transition={{ duration: 0.22, ease: "easeOut" }}
-          className={`relative flex min-h-[300px] items-center justify-center overflow-hidden rounded-xl border p-6 text-center shadow-sm ring-1 ring-black/5 sm:p-8 ${face.surfaceClassName}`}
+          className={`relative flex min-h-[300px] items-center justify-center overflow-hidden rounded-xl border p-6 text-center shadow-sm ring-1 ring-black/5 dark:ring-white/10 sm:p-8 ${face.surfaceClassName}`}
         >
           <div className="absolute left-5 top-5">
             <span className={`inline-flex rounded-md px-3 py-1 text-xs font-semibold uppercase tracking-wide ring-1 ${face.eyebrowClassName}`}>
@@ -44,7 +44,7 @@ export default function StudyCard({
           </div>
 
           <div className="mx-auto max-w-2xl px-2 pt-8">
-            <h2 className="whitespace-pre-wrap break-words text-2xl font-semibold leading-snug text-slate-900 sm:text-3xl">
+            <h2 className="whitespace-pre-wrap break-words text-2xl font-semibold leading-snug text-slate-900 dark:text-slate-100 sm:text-3xl">
               {face.text}
             </h2>
           </div>

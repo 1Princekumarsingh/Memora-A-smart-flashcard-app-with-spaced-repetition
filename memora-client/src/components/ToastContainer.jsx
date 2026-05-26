@@ -2,9 +2,9 @@ import useToastStore from "../store/toastStore";
 import { AnimatePresence, motion } from "framer-motion";
 
 const toastStyles = {
-  success: "bg-green-100 text-green-800 border-green-300",
-  error: "bg-red-100 text-red-800 border-red-300",
-  info: "bg-blue-100 text-blue-800 border-blue-300",
+  success: "border-green-300 bg-green-100 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200",
+  error: "border-red-300 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200",
+  info: "border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-200",
 };
 
 export default function ToastContainer(){

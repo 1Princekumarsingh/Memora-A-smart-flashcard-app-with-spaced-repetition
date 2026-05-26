@@ -27,28 +27,28 @@ export default function SignupForm() {
     return(
         <form 
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-6 rounded-xl shadow-md w-full max-w-sm">
-            <h2 className="text-2xl font-semibold mb-4 text-center">
+        className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-900">
+            <h2 className="mb-4 text-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
                 create Account
             </h2>
 
             <div className="mb-4">
-                <label>Email</label>
-                <input type="email" {...register("email")} className="w-full p-2 border rounded-md"/>
+                <label className="mb-1 block text-sm text-slate-700 dark:text-slate-300">Email</label>
+                <input type="email" {...register("email")} className="w-full rounded-md border border-gray-300 bg-white p-2 text-slate-900 placeholder:text-gray-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"/>
                 {errors.email &&
                 <p className="text-red-500 text-sm">{errors.email.message}</p> }
             </div>
 
             <div className="mb-4">
-                <label>Password</label>
-                <input type="password" {...register("password")} className="w-full p-2 border rounded-md"/>
+                <label className="mb-1 block text-sm text-slate-700 dark:text-slate-300">Password</label>
+                <input type="password" {...register("password")} className="w-full rounded-md border border-gray-300 bg-white p-2 text-slate-900 placeholder:text-gray-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"/>
                 {errors.password &&
                 <p className="text-red-500 text-sm">{errors.password.message}</p> }
             </div>
 
             <div className="mb-4">
-                <label>Confirm Password</label>
-                <input type="password" {...register("confirmPassword")} className="w-full p-2 border rounded-md"/>
+                <label className="mb-1 block text-sm text-slate-700 dark:text-slate-300">Confirm Password</label>
+                <input type="password" {...register("confirmPassword")} className="w-full rounded-md border border-gray-300 bg-white p-2 text-slate-900 placeholder:text-gray-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"/>
                 {errors.confirmPassword && (
                     <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
                 )}

@@ -32,16 +32,16 @@ export default function LoginForm() {
   return(
     <form 
     onSubmit={handleSubmit(onSubmit)}
-    className="bg-white p-6 rounded-xl shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-semibold mb-4 text-center">
+    className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-900">
+        <h2 className="mb-4 text-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
             Welcome Back
         </h2>
 
         {/* email */}
         <div className="mb-4">
-            <label className="block text-sm mb-1">Email</label>
+            <label className="mb-1 block text-sm text-slate-700 dark:text-slate-300">Email</label>
             <input type="email" {...register("email")}
-            className="w-full p-2 border rounded-md"/>
+            className="w-full rounded-md border border-gray-300 bg-white p-2 text-slate-900 placeholder:text-gray-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"/>
             {errors.email && (
                 <p className="text-red-500 text-sm mt-1">
                     {errors.email.message}
@@ -51,8 +51,8 @@ export default function LoginForm() {
 
         {/* password */}
         <div className="mb-4">
-            <label className="block text-sm mb-1">Password</label>
-            <input type="password" {...register("password")} className="w-full p-2 border rounded-md"/>
+            <label className="mb-1 block text-sm text-slate-700 dark:text-slate-300">Password</label>
+            <input type="password" {...register("password")} className="w-full rounded-md border border-gray-300 bg-white p-2 text-slate-900 placeholder:text-gray-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"/>
             {errors.password && (
                 <p className="text-red-500 text-sm mt-1">
                     {errors.password.message}

@@ -64,7 +64,7 @@ function StudySession({ id }) {
   if (deck.cards.length === 0) {
     return (
       <div className="mx-auto max-w-2xl p-6 text-center">
-        <p className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-10 text-gray-500">
+        <p className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-10 text-gray-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
           No cards in this deck.
         </p>
       </div>
@@ -82,11 +82,11 @@ function StudySession({ id }) {
   if (state.currentIndex >= dueCardIds.length) {
     return (
       <div className="mx-auto max-w-2xl p-6 text-center">
-        <div className="rounded-xl border border-gray-200 bg-white px-8 py-12 shadow-sm">
+        <div className="rounded-xl border border-gray-200 bg-white px-8 py-12 shadow-sm dark:border-slate-700 dark:bg-slate-900">
           <p className="text-sm font-medium uppercase tracking-wide text-green-600">
             Done
           </p>
-          <h1 className="mt-2 text-3xl font-bold text-gray-900">
+          <h1 className="mt-2 text-3xl font-bold text-gray-900 dark:text-slate-100">
             Session completed!
           </h1>
           <Link
@@ -103,7 +103,7 @@ function StudySession({ id }) {
   if (!currentCard) {
     return (
       <div className="mx-auto max-w-2xl p-6 text-center">
-        <p className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-10 text-gray-500">
+        <p className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-10 text-gray-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
           This card is no longer available.
         </p>
       </div>
@@ -117,20 +117,20 @@ function StudySession({ id }) {
     <div className="mx-auto max-w-3xl p-4 sm:p-6">
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500">
+          <p className="text-sm font-medium text-gray-500 dark:text-slate-400">
             Studying
           </p>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
             {deck.name}
           </h1>
         </div>
 
-        <p className="text-sm font-medium text-gray-500">
+        <p className="text-sm font-medium text-gray-500 dark:text-slate-400">
           Card {cardNumber} of {dueCardIds.length}
         </p>
       </div>
 
-      <div className="mb-6 h-2 overflow-hidden rounded-full bg-gray-600">
+      <div className="mb-6 h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-slate-800">
         <motion.div
           className="h-full rounded-full bg-blue-600"
           initial={{ width: 0 }}
@@ -150,7 +150,7 @@ function StudySession({ id }) {
       <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
         <button
           onClick={() => dispatch({ type: "FLIP" })}
-          className="inline-flex h-12 items-center justify-center rounded-lg bg-blue-600 px-6 text-base font-semibold text-white shadow-sm shadow-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="inline-flex h-12 items-center justify-center rounded-lg bg-blue-600 px-6 text-base font-semibold text-white shadow-sm shadow-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:shadow-none dark:focus:ring-offset-slate-950"
         >
           {state.flipped ? "Show Question" : "Reveal Answer"}
         </button>

@@ -16,22 +16,22 @@ export const RATING_OPTIONS = [
   {
     value: RATING_VALUES.FORGOT,
     label: RATINGS[RATING_VALUES.FORGOT],
-    className: "bg-red-500 shadow-red-100 focus:ring-red-400"
+    className: "bg-red-500 shadow-red-100 focus:ring-red-400 dark:shadow-none"
   },
   {
     value: RATING_VALUES.HARD,
     label: RATINGS[RATING_VALUES.HARD],
-    className: "bg-amber-500 shadow-amber-100 focus:ring-amber-400"
+    className: "bg-amber-500 shadow-amber-100 focus:ring-amber-400 dark:shadow-none"
   },
   {
     value: RATING_VALUES.GOOD,
     label: RATINGS[RATING_VALUES.GOOD],
-    className:"bg-blue-600 shadow-blue-100 focus:ring-blue-500"
+    className:"bg-blue-600 shadow-blue-100 focus:ring-blue-500 dark:shadow-none"
   },
   {
     value: RATING_VALUES.EASY,
     label: RATINGS[RATING_VALUES.EASY],
-    className: "bg-emerald-600 shadow-emerald-100 focus:ring-emerald-500"
+    className: "bg-emerald-600 shadow-emerald-100 focus:ring-emerald-500 dark:shadow-none"
   },
 ];
 

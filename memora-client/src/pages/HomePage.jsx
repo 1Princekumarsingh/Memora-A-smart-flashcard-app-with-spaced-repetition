@@ -6,7 +6,7 @@ export default function HomePage() {
   return(
     <PageWrapper>
       <div className="p-6 max-w-xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Your Decks</h1>
+        <h1 className="mb-4 text-2xl font-bold text-slate-900 dark:text-slate-100">Your Decks</h1>
         <DeckForm/>
         <DeckList/>
       </div>

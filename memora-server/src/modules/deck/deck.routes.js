@@ -1,15 +1,14 @@
-import express from 'express';
+import { Router } from "express";
 
-const router = express.Router();
+import { getDecks, getDeck, createDeck, deleteDeck } from "./deck.controller.js";
+import { asyncHandler }from "../../utils/asyncHandler.js";
 
-router.get("/", (req, res) => {
-  res.json({
-    message: 'Deck route working',
-  });
-});
+const router = Router();
 
-router.get('/error', (req, res) => {
-  throw new Error('Boom');
-});
+router.get("/", asyncHandler(getDecks));
+router.get("/:id", asyncHandler(getDeck));
+
+router.post("/", asyncHandler(createDeck));
+router.delete("/:id", asyncHandler(deleteDeck));
 
 export default router;

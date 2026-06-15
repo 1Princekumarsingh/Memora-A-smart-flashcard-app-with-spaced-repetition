@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import useDeckStore from "../features/deck/hooks/useDeckStore";
 import { Link } from "react-router-dom";
+import useDeckStore from "../features/deck/hooks/useDeckStore";
 
 import CardForm from "../features/card/components/CardForm";
 import CardList from "../features/card/components/CardList";
@@ -10,13 +11,21 @@ import useToastStore from "../store/toastStore";
 export default function DeckPage() {
   const{id} = useParams();
 
-  const decks = useDeckStore((s) => s.decks);
+  const {data: decks = [], // if undefined then []
+    isloading
+  } = useDecks();
   const addCard = useDeckStore((s)=> s.addCard);
   const deck = decks.find((d) => d.id === Number(id));
   const addToast = useToastStore((state) => state.addToast);
 
   if (!deck) {
     return <p className="text-slate-600 dark:text-slate-400">Deck not found.</p>;
+  }
+
+  if (isLoading) {
+    return (
+      <p>Loading decks...</p>
+    )
   }
 
   return(

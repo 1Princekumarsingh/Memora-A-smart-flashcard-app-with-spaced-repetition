@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import deckRoutes from './modules/deck/deck.routes.js';
+import cardRoutes from "./modules/card/card.routes.js";
 
 import { notFound } from './middleware/notFound.js';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -19,6 +20,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/decks', deckRoutes);
+app.use("/api/cards", cardRoutes);
 
 app.use(notFound);
 

@@ -1,4 +1,5 @@
 import { AppError } from "../../utils/AppError.js";
+import { Prisma } from "../../generated/prisma/client.ts";
 
 import * as deckService from "./deck.service.js";
 
@@ -12,7 +13,7 @@ export const getDecks = async(req, res) => {
 }
 
 export const getDeck = async(req, res) => {
-    const deck = await deckService.getDeckById(req.params.id);
+    const deck = await deckService.getDeckById(req.params.deckId);
 
     if(!deck){
         throw new AppError("Deck not found", 404)
@@ -39,19 +40,20 @@ export const createDeck = async(req, res) => {
     })
 }
 
-export const deleteDeck = async(req, res) => {
-    const deck = await deckService.getDeckById(req.params.id);
-
-    if(!deck){
-        throw new AppError(
-            "Deck not found", 404
-        )
-    }
-
-    await deckService.deleteDeck(req.params.id)
+export const deleteDeck = async (req, res) => {
+  try {
+    await deckService.deleteDeck(req.params.deckId);
 
     res.status(200).json({
-        success: true,
-        message: "Deck deleted successfully"
+      success: true,
+      message: "Deck deleted successfully"
     })
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && 
+        error.code === "P2025") {
+            throw new AppError("Deck not found", 404)
+    }
+
+    throw error
+  }
 }

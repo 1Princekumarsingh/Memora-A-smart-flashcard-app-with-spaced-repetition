@@ -8,8 +8,7 @@ export async function getDecks(){
     }
 
     const result = await response.json();
-
-    return result.data
+    return result.data;
 }
 
 export async function createDeck(payload){
@@ -22,11 +21,11 @@ export async function createDeck(payload){
     })
 
     if(!response.ok){
-        throw new Error("Failed to create deck")
+        throw new Error("Failed to create deck");
     }
 
     const result = await response.json();
-    return result.data
+    return result.data;
 }
 
 export async function deleteDeck(id) {
@@ -35,7 +34,7 @@ export async function deleteDeck(id) {
     });
 
     if(!response.ok){
-        throw new Error("Failed to delete deck")
+        throw new Error("Failed to delete deck");
     }
-    return response.json()
+    return response.json();
 }

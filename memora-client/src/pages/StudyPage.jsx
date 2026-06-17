@@ -3,6 +3,7 @@ import { Link, useParams, Navigate } from "react-router-dom"
 
 import useDeckStore from "../features/deck/hooks/useDeckStore";
 import useStudySession from "../features/study/hooks/useStudySession";
+import { useReview } from "../features/study/hooks/useReviewMutation";
 
 import StudyCard from "../features/study/components/StudyCard";
 import RatingBar from "../features/study/components/RatingBar";
@@ -19,7 +20,7 @@ export default function StudyPage() {
 }
 
 function StudySession({ id }) {
-  const rateCard = useDeckStore((s)=> s.rateCard)
+  const reviewMutation = useReview();
   const addToast = useToastStore((state) => state.addToast);
   const decks = useDeckStore((s) => s.decks);
   const deck = decks.find((d) => d.id === Number(id))
@@ -36,10 +37,13 @@ function StudySession({ id }) {
     dispatch({ type: "NEXT" });
   }
 
-  const handleRate = (rating) =>{
+  const handleRate = async (rating) => {
     if (!deck || !currentCard || !state.revealed) return;
 
-    rateCard(deck.id, currentCard.id, rating);
+    await reviewMutation.mutateAsync({
+      cardId: currentCard.id,
+      rating,
+    });
 
     const isLastCard = state.currentIndex === dueCardIds.length - 1;
     if (isLastCard) {

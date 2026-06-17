@@ -1,4 +1,4 @@
-import { success, ZodError } from "zod";
+import { ZodError } from "zod";
 
 export const validate =
   (schema) => async (req, res, next) => {

@@ -17,7 +17,7 @@ export default function DeckPage() {
   const createCardMutation = useCreateCard();
   const addToast = useToastStore((state) => state.addToast);
 
-  const deck = decks.find((d) => d.id === Number(deckId));
+  const deck = decks.find((d) => d.id === deckId);
 
   if (isLoadingDecks || isLoading) {
     return (

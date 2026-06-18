@@ -31,3 +31,18 @@ export const deleteDeck = async (id) => {
         where: {id}
     })
 }
+
+export const getDueCards = async (id) => {
+    return prisma.card.findMany({
+        where: {
+            deckId: id,
+            OR: [
+                { nextReview: null },
+                { nextReview: { lte: new Date() } }
+            ]
+        },
+        orderBy: {
+            nextReview: "asc"
+        }
+    })
+}

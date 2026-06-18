@@ -1,37 +1,50 @@
-import { useState } from "react";
-import { Link, useParams, Navigate } from "react-router-dom"
+import { Link, useParams, Navigate } from "react-router-dom";
 
-import useDeckStore from "../features/deck/hooks/useDeckStore";
 import useStudySession from "../features/study/hooks/useStudySession";
 import { useReview } from "../features/study/hooks/useReviewMutation";
+import { useStudyCards } from "../features/study/hooks/useStudyCards";
+import { useDecks } from "../features/deck/hooks/useDecks";
 
 import StudyCard from "../features/study/components/StudyCard";
 import RatingBar from "../features/study/components/RatingBar";
-import { getDueCards } from "../utils/getDueCards";
 import useKeyBoardShortcut from "../features/study/hooks/useKeyboardShortcut";
 import { RATING_VALUES } from "../constants/ratings";
 import useToastStore from "../store/toastStore";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function StudyPage() {
-  const { id } = useParams();
+  const { deckId } = useParams();
 
-  return <StudySession key={id} id={id} />
+  const {
+    data: cards = [],
+    isLoading,
+  } = useStudyCards(deckId);
+
+  const { data: decks = [], isLoading: isLoadingDecks } = useDecks();
+  const deck = decks.find((d) => d.id === deckId);
+
+  if (isLoading || isLoadingDecks) {
+    return (
+      <div className="p-6 text-center">
+        <p>Loading study session...</p>
+      </div>
+    );
+  }
+
+  if (!deck) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <StudySession key={deckId} deck={deck} cards={cards} />;
 }
 
-function StudySession({ id }) {
+function StudySession({ deck, cards }) {
   const reviewMutation = useReview();
   const addToast = useToastStore((state) => state.addToast);
-  const decks = useDeckStore((s) => s.decks);
-  const deck = decks.find((d) => d.id === Number(id))
   
   const [state, dispatch] = useStudySession();
-  const [dueCardIds] = useState(() =>
-    deck ? getDueCards(deck.cards).map((card) => card.id) : []
-  );
 
-  const currentCardId = dueCardIds[state.currentIndex];
-  const currentCard = deck?.cards.find((card) => card.id === currentCardId);
+  const currentCard = cards[state.currentIndex];
 
   const handleNext = () => {
     dispatch({ type: "NEXT" });
@@ -45,7 +58,7 @@ function StudySession({ id }) {
       rating,
     });
 
-    const isLastCard = state.currentIndex === dueCardIds.length - 1;
+    const isLastCard = state.currentIndex === cards.length - 1;
     if (isLastCard) {
       addToast("Session completed!", "success");
     }
@@ -61,21 +74,7 @@ function StudySession({ id }) {
     "4" : () => handleRate(RATING_VALUES.EASY)
   })
 
-  if (!deck) {
-    return <Navigate to="/" replace />
-  }
-
-  if (deck.cards.length === 0) {
-    return (
-      <div className="mx-auto max-w-2xl p-6 text-center">
-        <p className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-10 text-gray-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-          No cards in this deck.
-        </p>
-      </div>
-    )
-  }
-
-  if(dueCardIds.length === 0){
+  if (cards.length === 0) {
     return (
       <div className="p-6 text-center">
         <h1 className="text-2xl font-bold">No cards due today.</h1>
@@ -83,7 +82,7 @@ function StudySession({ id }) {
     )
   }
 
-  if (state.currentIndex >= dueCardIds.length) {
+  if (state.currentIndex >= cards.length) {
     return (
       <div className="mx-auto max-w-2xl p-6 text-center">
         <div className="rounded-xl border border-gray-200 bg-white px-8 py-12 shadow-sm dark:border-slate-700 dark:bg-slate-900">
@@ -115,7 +114,7 @@ function StudySession({ id }) {
   }
 
   const cardNumber = state.currentIndex + 1;
-  const progress = (cardNumber / dueCardIds.length) * 100;
+  const progress = (cardNumber / cards.length) * 100;
 
   return (
     <div className="mx-auto max-w-3xl p-4 sm:p-6">
@@ -130,7 +129,7 @@ function StudySession({ id }) {
         </div>
 
         <p className="text-sm font-medium text-gray-500 dark:text-slate-400">
-          Card {cardNumber} of {dueCardIds.length}
+          Card {cardNumber} of {cards.length}
         </p>
       </div>
 

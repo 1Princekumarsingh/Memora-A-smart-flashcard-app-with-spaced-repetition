@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { getDecks, getDeck, createDeck, deleteDeck } from "./deck.controller.js";
+import { getDecks, getDeck, createDeck, deleteDeck, getStudyCards } from "./deck.controller.js";
 import { getCards, createCard } from "../card/card.controller.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 
@@ -18,5 +18,7 @@ router.delete("/:deckId", asyncHandler(deleteDeck));
 
 router.get("/:deckId/cards",asyncHandler(getCards));
 router.post("/:deckId/cards",validate(createCardSchema),asyncHandler(createCard));
+
+router.get("/:deckId/study", asyncHandler(getStudyCards));
 
 export default router;

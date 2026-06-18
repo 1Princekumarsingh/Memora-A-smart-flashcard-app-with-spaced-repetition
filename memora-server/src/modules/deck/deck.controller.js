@@ -57,3 +57,13 @@ export const deleteDeck = async (req, res) => {
     throw error
   }
 }
+
+export const getStudyCards = async(req, res) => {
+    const cards = await deckService.getDueCards(req.params.deckId);
+
+    res.status(200).json({
+        success: true,
+        data: cards
+
+    })
+}

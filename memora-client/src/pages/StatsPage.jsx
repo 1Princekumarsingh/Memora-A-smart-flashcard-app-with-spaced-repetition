@@ -1,17 +1,35 @@
-import useDeckStore from "../features/deck/hooks/useDeckStore";
-import { getStudyStats, getMostForgottenDecks } from "../utils/stats";
-
+import { useStats } from "../features/stats/hooks/useStats";
 import StudyHeatmap from "../features/stats/components/StudyHeatmap";
-import { mockReviews } from "../features/stats/mockReviews";
-import { buildHeatmapData } from "../utils/buildHeatmapData";
 
 export default function StatsPage() {
-  
-  const decks = useDeckStore((s)=> s.decks)
-  const stats = getStudyStats(decks)
-  const mostForgottenDecks = getMostForgottenDecks(decks);
+  const { statsQuery, heatmapQuery } = useStats();
 
-  if (stats.totalReviews === 0) {
+  if (statsQuery.isLoading || heatmapQuery.isLoading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <p className="text-slate-600 dark:text-slate-400">Loading stats...</p>
+      </div>
+    );
+  }
+
+  if (statsQuery.isError || heatmapQuery.isError) {
+    return (
+      <div className="p-6 text-center">
+        <h1 className="text-2xl font-bold text-red-600 dark:text-red-400">
+          Failed to load stats
+        </h1>
+        <p className="mt-2 text-gray-500 dark:text-slate-400">
+          Please try again later.
+        </p>
+      </div>
+    );
+  }
+
+  const stats = statsQuery.data;
+  const heatmapData = heatmapQuery.data || [];
+  const mostForgottenDecks = stats?.mostForgottenDecks || [];
+
+  if (!stats || stats.totalReviews === 0) {
     return (
       <div className="p-6 text-center">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
@@ -24,9 +42,6 @@ export default function StatsPage() {
       </div>
     );
   }
-
-  // transform raw reviews into heatmap data
-  const heatmapData = buildHeatmapData(mockReviews);
 
   return(
     <div className="max-w-2xl mx-auto p-6">

@@ -8,25 +8,42 @@ export default function LoginForm() {
     const navigate = useNavigate();
     const login = useAuthStore((state) => state.login);
 
-  const{
+  const {
     register,
     handleSubmit,
+    setError,
     formState: {errors, isSubmitting}
   } = useForm({ resolver: zodResolver(loginSchema)})
 
   const onSubmit = async (data) => {
     console.log("Login data:", data);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      });
 
-    // to simulate api delay
-    await new Promise((res) => setTimeout(res, 1000));
-    // reset();
+      const resData = await response.json();
 
-    login({ // store token
-      token: "fake-jwt-token",
-      user: { email: data.email },
-    }); 
+      if (!response.ok) {
+        throw new Error(resData.message || "Failed to login");
+      }
 
-    navigate("/"); // redirect
+      login({
+        token: resData.data.token,
+        user: resData.data.user,
+      });
+
+      navigate("/"); // redirect
+    } catch (err) {
+      setError("root", { type: "manual", message: err.message });
+    }
   }
 
   return(
@@ -36,6 +53,12 @@ export default function LoginForm() {
         <h2 className="mb-4 text-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
             Welcome Back
         </h2>
+
+        {errors.root && (
+            <p className="text-red-500 text-sm mb-4 text-center font-medium">
+                {errors.root.message}
+            </p>
+        )}
 
         {/* email */}
         <div className="mb-4">

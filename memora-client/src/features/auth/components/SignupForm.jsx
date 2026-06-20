@@ -8,21 +8,44 @@ export default function SignupForm() {
     const navigate = useNavigate();
     const login = useAuthStore((s) => s.login);
 
-    const{
+    const {
         register, 
         handleSubmit,
+        setError,
         formState: {errors, isSubmitting}
     } = useForm({
         resolver: zodResolver(signupSchema)
     })
 
     const onSubmit = async(data) =>{
-        await new Promise((res) => setTimeout(res, 1000));
-        login({
-            token: "fake-tokenn",
-            user: {email:data.email}
-        });
-        navigate("/")
+        console.log("Signup data:", data);
+        try {
+          const response = await fetch("/api/auth/signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: data.email,
+              password: data.password,
+            }),
+          });
+
+          const resData = await response.json();
+
+          if (!response.ok) {
+            throw new Error(resData.message || "Failed to sign up");
+          }
+
+          login({
+            token: resData.data.token,
+            user: resData.data.user,
+          });
+
+          navigate("/"); // redirect
+        } catch (err) {
+          setError("root", { type: "manual", message: err.message });
+        }
     }
     return(
         <form 
@@ -31,6 +54,12 @@ export default function SignupForm() {
             <h2 className="mb-4 text-center text-2xl font-semibold text-slate-900 dark:text-slate-100">
                 create Account
             </h2>
+
+            {errors.root && (
+                <p className="text-red-500 text-sm mb-4 text-center font-medium">
+                    {errors.root.message}
+                </p>
+            )}
 
             <div className="mb-4">
                 <label className="mb-1 block text-sm text-slate-700 dark:text-slate-300">Email</label>

@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
+import authRoutes from "./modules/auth/auth.routes.js";
 import deckRoutes from './modules/deck/deck.routes.js';
 import cardRoutes from "./modules/card/card.routes.js";
 import reviewRoutes from "./modules/review/review.routes.js";
@@ -25,6 +26,7 @@ app.use("/api/decks", deckRoutes);
 app.use("/api/cards", cardRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use(notFound);
 

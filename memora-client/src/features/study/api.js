@@ -1,8 +1,10 @@
+import { apiFetch } from "../../lib/apiClient";
+
 const API_reviews = "http://localhost:5000/api/reviews";
 const API_decks = "http://localhost:5000/api/decks";
 
 export async function submitReview(payload) {
-    const response = await fetch(API_reviews, {
+    const response = await apiFetch(API_reviews, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -16,7 +18,7 @@ export async function submitReview(payload) {
 }
 
 export async function getStudyCards(deckId) {
-    const response = await fetch(`${API_decks}/${deckId}/study`);
+    const response = await apiFetch(`${API_decks}/${deckId}/study`);
 
     if(!response.ok){
         throw new Error("Failed to fetch study cards");

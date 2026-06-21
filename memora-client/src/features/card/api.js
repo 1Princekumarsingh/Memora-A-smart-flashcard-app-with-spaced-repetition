@@ -1,8 +1,10 @@
+import { apiFetch } from "../../lib/apiClient";
+
 const DECKS_API = "http://localhost:5000/api/decks";
 const CARDS_API = "http://localhost:5000/api/cards";
 
 export async function getCards(deckId) {
-    const response = await fetch(`${DECKS_API}/${deckId}/cards`);
+    const response = await apiFetch(`${DECKS_API}/${deckId}/cards`);
 
     if(!response.ok){
         throw new Error("Failed to fetch cards");
@@ -12,7 +14,7 @@ export async function getCards(deckId) {
 }
 
 export async function createCard({deckId, question, answer}){
-  const response = await fetch(
+  const response = await apiFetch(
     `${DECKS_API}/${deckId}/cards`,
     {
       method: "POST",
@@ -35,7 +37,7 @@ export async function createCard({deckId, question, answer}){
 }
 
 export async function deleteCard(cardId){
-    const response = await fetch(`${CARDS_API}/${cardId}`, {
+    const response = await apiFetch(`${CARDS_API}/${cardId}`, {
         method: "DELETE"
     })
     

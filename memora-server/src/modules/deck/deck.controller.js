@@ -4,7 +4,7 @@ import { Prisma } from "../../generated/prisma/client.ts";
 import * as deckService from "./deck.service.js";
 
 export const getDecks = async(req, res) => {
-    const decks = await deckService.getAllDecks();
+    const decks = await deckService.getAllDecks(req.user.id);
 
     res.status(200).json({
         success: true,
@@ -13,7 +13,7 @@ export const getDecks = async(req, res) => {
 }
 
 export const getDeck = async(req, res) => {
-    const deck = await deckService.getDeckById(req.params.deckId);
+    const deck = await deckService.getDeckById(req.params.deckId, req.user.id);
 
     if(!deck){
         throw new AppError("Deck not found", 404)
@@ -27,11 +27,10 @@ export const getDeck = async(req, res) => {
 
 export const createDeck = async(req, res) => {
     const {name} = req.body;
-    const TEMP_USER_ID = "cmq7wfs4t0000cwdn9384p58p";
 
     const deck = await deckService.createDeck(
         name,
-        TEMP_USER_ID
+        req.user.id
     )
 
     res.status(201).json({
@@ -41,29 +40,34 @@ export const createDeck = async(req, res) => {
 }
 
 export const deleteDeck = async (req, res) => {
-  try {
-    await deckService.deleteDeck(req.params.deckId);
+  const deck = await deckService.getDeckById(
+    req.params.deckId,
+    req.user.id
+  );
 
-    res.status(200).json({
-      success: true,
-      message: "Deck deleted successfully"
-    })
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && 
-        error.code === "P2025") {
-            throw new AppError("Deck not found", 404)
-    }
-
-    throw error
+  if (!deck) {
+    throw new AppError("Deck not found", 404);
   }
+
+  await deckService.deleteDeck(req.params.deckId);
+
+  res.status(200).json({
+    success: true,
+    message: "Deck deleted successfully"
+  });
 }
 
 export const getStudyCards = async(req, res) => {
+    const deck = await deckService.getDeckById(req.params.deckId, req.user.id);
+
+    if(!deck){
+        throw new AppError("Deck not found", 404)
+    }
+
     const cards = await deckService.getDueCards(req.params.deckId);
 
     res.status(200).json({
         success: true,
         data: cards
-
     })
 }

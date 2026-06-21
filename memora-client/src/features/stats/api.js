@@ -1,8 +1,10 @@
+import { apiFetch } from "../../lib/apiClient";
+
 const API ="http://localhost:5000/api/stats";
 
 export async function getStats() {
   const response =
-    await fetch(API);
+    await apiFetch(API);
 
   const result =
     await response.json();
@@ -11,7 +13,7 @@ export async function getStats() {
 }
 
 export async function getHeatmap(){
-    const response = await fetch(`${API}/heatmap`);
+    const response = await apiFetch(`${API}/heatmap`);
 
     const result = await response.json();
 

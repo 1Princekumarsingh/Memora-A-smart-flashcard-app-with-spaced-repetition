@@ -1,16 +1,22 @@
 import { prisma } from "../../config/prisma.js";
 
-export const getAllDecks = async () => {
+export const getAllDecks = async (userId) => {
     return prisma.deck.findMany({
+        where: {
+            userId,
+        },
         orderBy: {
             createdAt: "desc"
         }
     })
 }
 
-export const getDeckById = async (id) => {
-    return prisma.deck.findUnique({
-        where: {id},
+export const getDeckById = async (deckId, userId) => {
+    return prisma.deck.findFirst({
+        where: {
+            id: deckId,
+            userId,
+        },
         include: {
             cards: true
         }

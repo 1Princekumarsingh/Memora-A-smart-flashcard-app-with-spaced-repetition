@@ -3,19 +3,20 @@ import { persist } from "zustand/middleware";
 
 const useAuthStore = create(
   persist((set, get) => ({
-      token: null,
+      accessToken: null,
+      refreshToken: null,
       user: null,
       // hyderate and dehyderate: prevent flicker redirect and auth glitches
       hydrated: false,
 
-      isAuthenticated: () => !!get().token, //get: gives the current store state
+      isAuthenticated: () => !!get().accessToken, //get: gives the current store state
 
-      login: ({ token, user }) => {
-        set({ token, user });
+      login: ({ accessToken, refreshToken, user }) => {
+        set({ accessToken, refreshToken, user });
       },
 
       logout: () => {
-        set({ token: null, user: null });
+        set({ accessToken: null, refreshToken: null, user: null });
       },
 
       setHydrated: () => set({ hydrated: true }),
@@ -25,7 +26,8 @@ const useAuthStore = create(
 
       // Only persist required data
       partialize: (state) => ({
-        token: state.token,
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
         user: state.user,
       }),
       onRehydrateStorage: () => (state, error) => {

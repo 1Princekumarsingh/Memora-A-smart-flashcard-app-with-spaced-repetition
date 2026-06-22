@@ -18,3 +18,20 @@ export const login = async(req, res) => {
         data: result
     })
 }
+
+export const refresh = async(req, res) => {
+    const result = await authService.refresh(req.body.refreshToken);
+
+    res.status(200).json({
+        success: true,
+        data: result
+    })
+}
+
+export const logout = async (req, res) => {
+    await authService.logout(req.body.refreshToken);
+
+    res.status(200).json({
+        success: true
+    })
+}

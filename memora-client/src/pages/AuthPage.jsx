@@ -8,14 +8,14 @@ import useTheme from "../utils/useTheme";
 
 export default function AuthPage() {
   const [mode, setMode] = useState("login");
-  const token = useAuthStore((s) => s.token);
+  const accessToken = useAuthStore((s) => s.accessToken);
   const initializeTheme = useTheme((state) => state.initializeTheme);
 
   useEffect(() => {
     initializeTheme();
   }, [initializeTheme]);
 
-  if (token) return <Navigate to="/" replace/>
+  if (accessToken) return <Navigate to="/" replace/>
 
   return(
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">

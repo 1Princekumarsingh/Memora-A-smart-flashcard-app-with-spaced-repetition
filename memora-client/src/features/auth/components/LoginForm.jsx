@@ -36,7 +36,8 @@ export default function LoginForm() {
       }
 
       login({
-        token: resData.data.token,
+        accessToken: resData.data.accessToken,
+        refreshToken: resData.data.refreshToken,
         user: resData.data.user,
       });
 

@@ -1,7 +1,23 @@
 import { prisma } from "../../config/prisma.js";
+import { cacheKeys } from "../../constants/cacheKeys.js";
+import { getCache, setCache } from "../../utils/cache.js";
 
-export async function getStats() {
+export async function getStats(userId) {
+    const key = cacheKeys.stats(userId);
+    const cached = await getCache(key);
+
+    if (cached) {
+        return cached;
+    }
+
     const reviews = await prisma.review.findMany({
+        where: {
+            card: {
+                deck: {
+                    userId
+                }
+            }
+        },
         include: {
             card: {
                 include: {
@@ -24,6 +40,9 @@ export async function getStats() {
     const retentionRate = totalReviews === 0 ? 0 : Math.round((strongCount / totalReviews) * 100);
 
     const decks = await prisma.deck.findMany({
+        where: {
+            userId
+        },
         include: {
             cards: {
                 include: {
@@ -64,7 +83,7 @@ export async function getStats() {
         }))
         .filter((deck) => deck.cards.length > 0);
 
-    return {
+    const stats = {
         totalReviews,
         forgotCount,
         hardCount,
@@ -75,10 +94,28 @@ export async function getStats() {
         retentionRate,
         mostForgottenDecks
     };
+
+    await setCache(key, stats, 300);
+
+    return stats;
 }
 
-export const getHeatmapData = async() => {
+export const getHeatmapData = async(userId) => {
+    const key = cacheKeys.heatmap(userId);
+    const cached = await getCache(key);
+
+    if (cached) {
+        return cached;
+    }
+
     const reviews = await prisma.review.findMany({
+        where: {
+            card: {
+                deck: {
+                    userId
+                }
+            }
+        },
         select: {
             reviewedAt: true
         }
@@ -105,6 +142,8 @@ export const getHeatmapData = async() => {
         });
         current.setDate(current.getDate() + 1);
     }
+
+    await setCache(key, result, 300);
 
     return result;
 };

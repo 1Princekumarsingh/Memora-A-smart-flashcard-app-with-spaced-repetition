@@ -2,6 +2,7 @@ import { AppError } from "../../utils/AppError.js";
 import { Prisma } from "../../generated/prisma/client.ts";
 
 import * as deckService from "./deck.service.js";
+import * as cardService from "../card/card.service.js";
 
 export const getDecks = async(req, res) => {
     const decks = await deckService.getAllDecks(req.user.id);
@@ -49,7 +50,7 @@ export const deleteDeck = async (req, res) => {
     throw new AppError("Deck not found", 404);
   }
 
-  await deckService.deleteDeck(req.params.deckId);
+  await deckService.deleteDeck(req.params.deckId, req.user.id);
 
   res.status(200).json({
     success: true,
@@ -64,7 +65,7 @@ export const getStudyCards = async(req, res) => {
         throw new AppError("Deck not found", 404)
     }
 
-    const cards = await deckService.getDueCards(req.params.deckId);
+    const cards = await cardService.getDueCardsByDeckId(req.params.deckId);
 
     res.status(200).json({
         success: true,

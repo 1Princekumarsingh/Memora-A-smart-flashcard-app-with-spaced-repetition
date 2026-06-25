@@ -93,9 +93,7 @@ export const refresh = async(refreshToken) => {
 
     const payload = verifyRefreshToken(refreshToken);
 
-    const accessToken = signAccessToken({
-        id: payload.id
-    })
+    const accessToken = signAccessToken({id: payload.id})
 
     //refresh roation
     await prisma.refreshToken.delete({

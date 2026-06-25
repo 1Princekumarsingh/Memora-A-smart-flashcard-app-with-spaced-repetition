@@ -8,6 +8,7 @@ export const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key';
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '15m';
 export const REFRESH_SECRET = process.env.REFRESH_SECRET || 'super-refresh-secret';
 export const REFRESH_EXPIRES_IN = process.env.REFRESH_EXPIRES_IN || '7d';
+export const REDIS_URL = process.env.REDIS_URL
 
 export const env = {
   PORT,
@@ -17,6 +18,7 @@ export const env = {
   JWT_EXPIRES_IN,
   REFRESH_SECRET,
   REFRESH_EXPIRES_IN,
+  REDIS_URL
 };
 
 export default {

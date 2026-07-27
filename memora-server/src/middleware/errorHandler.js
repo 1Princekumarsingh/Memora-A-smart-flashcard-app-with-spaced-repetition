@@ -3,6 +3,7 @@ export const errorHandler = (err, req, res, next) => {
   const status = err.status || (statusCode >= 400 && statusCode < 500 ? 'fail' : 'error');
 
   res.status(statusCode).json({
+    success: false,
     status,
     message: err.message || 'Internal Server Error',
   });

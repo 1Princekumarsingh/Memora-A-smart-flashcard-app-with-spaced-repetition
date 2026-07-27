@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { randomUUID } from "crypto";
 
 import { env } from "../config/env.js";
 
@@ -11,7 +12,10 @@ export const verifyAccessToken = (token) => {
 }
 
 export const signRefreshToken = (payload) => {
-    return jwt.sign(payload, env.REFRESH_SECRET, {expiresIn: env.REFRESH_EXPIRES_IN});
+    return jwt.sign(payload, env.REFRESH_SECRET, {
+        expiresIn: env.REFRESH_EXPIRES_IN,
+        jwtid: randomUUID(),
+    });
 }
 
 export const verifyRefreshToken = (token) => {

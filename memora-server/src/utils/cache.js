@@ -1,6 +1,10 @@
 import { redis } from "../config/redis.js"
 
 export async function getCache(key) {
+    if (!redis) {
+        return null;
+    }
+
     const cached = await redis.get(key);
 
     if(!cached){
@@ -11,6 +15,10 @@ export async function getCache(key) {
 }
 
 export async function setCache(key, value, ttl=300) {
+    if (!redis) {
+        return;
+    }
+
     await redis.set(
         key,
         JSON.stringify(value),
@@ -20,6 +28,10 @@ export async function setCache(key, value, ttl=300) {
 }
 
 export async function deleteCache(...keys){
+    if (!redis) {
+        return;
+    }
+
     if(keys.length > 0){
         await redis.del(...keys)
     }

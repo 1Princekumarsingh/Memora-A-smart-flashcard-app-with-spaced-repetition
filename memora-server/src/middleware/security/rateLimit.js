@@ -10,7 +10,7 @@ const makeRedisStore = (prefix) =>
         sendCommand: (...args) => redis.call(...args),
     });
 
-const skipInTest = () => NODE_ENV === "test";
+const skipInTest = () => NODE_ENV === "test" && process.env.ENABLE_RATE_LIMIT_TESTS !== "true";
 const storeFor = (prefix) => NODE_ENV === "test" ? undefined : makeRedisStore(prefix);
 
 // global api limiter

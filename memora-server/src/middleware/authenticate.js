@@ -12,7 +12,12 @@ export const authenticate = async(req, res, next) => {
 
     const token = authHeader.split(" ")[1];
 
-    const payload = verifyAccessToken(token);
+    let payload;
+    try {
+        payload = verifyAccessToken(token);
+    } catch {
+        return next(new AppError("Invalid token", 401));
+    }
 
     const user = await prisma.user.findUnique({
         where: {
@@ -29,5 +34,3 @@ export const authenticate = async(req, res, next) => {
     req.user = user //now controllers can do req.user.id without touching JWT
     next()
 }
-    
-       

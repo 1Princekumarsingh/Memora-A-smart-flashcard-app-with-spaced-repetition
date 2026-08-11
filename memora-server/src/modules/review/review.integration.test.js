@@ -74,4 +74,34 @@ describe("review integration", () => {
         
         expect(response.status).toBe(400);
     })
+
+    it("should update card SM-2 scheduling fields after review", async () => {
+        const {accessToken} = await loginUser();
+        const deck = await createDeck(accessToken)
+        const card = await createCard(accessToken, deck.id)
+
+        const response = await request(app)
+        .post("/api/reviews")
+        .set("Authorization", `Bearer ${accessToken}`)
+        .send({
+            cardId: card.id,
+            rating: 4
+        })
+
+        expect(response.status).toBe(201)
+
+        const updatedCard = await prisma.card.findUnique({
+            where: {
+                id: card.id
+            }
+        })
+
+        expect(updatedCard.repetitions).toBe(1);
+        expect(updatedCard.interval).toBe(1);
+        expect(updatedCard.easeFactor).toBeCloseTo(2.6);
+        expect(updatedCard.nextReview).not.toBeNull();
+
+        const now = new Date();
+        expect(updatedCard.nextReview.getTime()).toBeGreaterThan(now.getTime());
+    })
 })

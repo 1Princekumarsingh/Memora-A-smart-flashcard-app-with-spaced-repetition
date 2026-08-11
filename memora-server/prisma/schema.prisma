@@ -33,7 +33,7 @@ model Deck {
   name String
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   cards Card[]
 
@@ -47,14 +47,20 @@ model Card {
   id String @id @default(cuid())
 
   question String
-  answer String
+  answer   String
 
   nextReview DateTime?
 
   deckId String
-  deck Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  deck   Deck   @relation(fields: [deckId], references: [id], onDelete: Cascade)
 
   reviews Review[]
+
+  repetitions Int @default(0)
+
+  interval Int @default(0)
+
+  easeFactor Float @default(2.5)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -70,7 +76,7 @@ model Review {
   reviewedAt DateTime @default(now())
 
   cardId String
-  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  card   Card   @relation(fields: [cardId], references: [id], onDelete: Cascade)
 
   @@index([cardId])
 }
@@ -83,7 +89,7 @@ model RefreshToken {
   expiresAt DateTime
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
